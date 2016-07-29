@@ -1,4 +1,4 @@
-System.register(["angular2/core", "./weather.service", "./weather-item"], function(exports_1, context_1) {
+System.register(["angular2/core", "./weather.service", "./weather-item", "rxjs/Subject"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(["angular2/core", "./weather.service", "./weather-item"], functi
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, weather_service_1, weather_item_1;
+    var core_1, weather_service_1, weather_item_1, Subject_1;
     var WeatherSearchComponent;
     return {
         setters:[
@@ -22,24 +22,37 @@ System.register(["angular2/core", "./weather.service", "./weather-item"], functi
             },
             function (weather_item_1_1) {
                 weather_item_1 = weather_item_1_1;
+            },
+            function (Subject_1_1) {
+                Subject_1 = Subject_1_1;
             }],
         execute: function() {
             WeatherSearchComponent = (function () {
                 function WeatherSearchComponent(_weatherService) {
                     this._weatherService = _weatherService;
+                    this.searchStream = new Subject_1.Subject();
+                    this.data = {};
                 }
-                WeatherSearchComponent.prototype.onSubmit = function (form) {
-                    // console.log(form);
-                    this._weatherService.searchWeatherData(form.value.location)
-                        .subscribe(function (data) {
-                        var weatherItem = new weather_item_1.WeatherItem();
-                    });
+                WeatherSearchComponent.prototype.onSubmit = function () {
+                    var weatherItem = new weather_item_1.WeatherItem(this.data.name, this.data.weather[0].description, this.data.main.temp);
+                    this._weatherService.addWeatherItem(weatherItem);
+                };
+                WeatherSearchComponent.prototype.onSearchLocation = function (cityName) {
+                    this.searchStream
+                        .next(cityName);
+                };
+                WeatherSearchComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this.searchStream
+                        .debounceTime(300)
+                        .distinctUntilChanged()
+                        .switchMap(function (input) { return _this._weatherService.searchWeatherData(input); })
+                        .subscribe(function (data) { return _this.data = data; });
                 };
                 WeatherSearchComponent = __decorate([
                     core_1.Component({
                         selector: 'weather-search',
-                        template: "\n\t\t<section class=\"weather-search\">\n\t\t\t<form (ngSubmit)=\"onSubmit(f)\" #f=\"ngForm\">\n\t\t\t\t<label for=\"city\">City</label>\n\t\t\t\t<input ngControl=\"location\" type=\"text\" id=\"city\" required>\n\t\t\t\t<button type=\"submit\">Add City</button>\n\t\t\t</form>\n\t\t\t<div>\n\t\t\t\t<span class=\"info\">City found:</span> City Name\n\t\t\t</div>\n\t\t</section>\n\t",
-                        providers: [weather_service_1.WeatherService]
+                        template: "\n        <section class=\"weather-search\">\n            <form (ngSubmit)=\"onSubmit()\">\n                <label for=\"city\">City</label>\n                <input ngControl=\"location\" type=\"text\" id=\"city\" (input)=\"onSearchLocation(input.value)\" required #input>\n                <button type=\"submit\">Add City</button>\n            </form>\n            <div>\n                <span class=\"info\">City found:</span> {{data.name}}\n            </div>\n        </section>\n    "
                     }), 
                     __metadata('design:paramtypes', [weather_service_1.WeatherService])
                 ], WeatherSearchComponent);
@@ -50,4 +63,4 @@ System.register(["angular2/core", "./weather.service", "./weather-item"], functi
     }
 });
 
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYXRoZXIvd2VhdGhlci1zZWFyY2guY29tcG9uZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O1lBb0JBO2dCQUNDLGdDQUFxQixlQUErQjtvQkFBL0Isb0JBQWUsR0FBZixlQUFlLENBQWdCO2dCQUFHLENBQUM7Z0JBQ3hELHlDQUFRLEdBQVIsVUFBUyxJQUFrQjtvQkFDMUIscUJBQXFCO29CQUNyQixJQUFJLENBQUMsZUFBZSxDQUFDLGlCQUFpQixDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsUUFBUSxDQUFDO3lCQUMxRCxTQUFTLENBQ1QsVUFBQSxJQUFJO3dCQUNILElBQU0sV0FBVyxHQUFHLElBQUksMEJBQVcsRUFBRSxDQUFBO29CQUN0QyxDQUFDLENBQ0QsQ0FBQztnQkFDSCxDQUFDO2dCQTFCRjtvQkFBQyxnQkFBUyxDQUFDO3dCQUNWLFFBQVEsRUFBRSxnQkFBZ0I7d0JBQzFCLFFBQVEsRUFBRSxrWUFXVDt3QkFDRCxTQUFTLEVBQUUsQ0FBQyxnQ0FBYyxDQUFDO3FCQUMzQixDQUFDOzswQ0FBQTtnQkFZRiw2QkFBQztZQUFELENBWEEsQUFXQyxJQUFBO1lBWEQsMkRBV0MsQ0FBQSIsImZpbGUiOiJ3ZWF0aGVyL3dlYXRoZXItc2VhcmNoLmNvbXBvbmVudC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50fSBmcm9tIFwiYW5ndWxhcjIvY29yZVwiO1xuaW1wb3J0IHtDb250cm9sR3JvdXB9IGZyb20gXCJhbmd1bGFyMi9jb21tb25cIjtcbmltcG9ydCB7V2VhdGhlclNlcnZpY2V9IGZyb20gXCIuL3dlYXRoZXIuc2VydmljZVwiO1xuaW1wb3J0IHtXZWF0aGVySXRlbX0gZnJvbSBcIi4vd2VhdGhlci1pdGVtXCI7XG5AQ29tcG9uZW50KHtcblx0c2VsZWN0b3I6ICd3ZWF0aGVyLXNlYXJjaCcsXG5cdHRlbXBsYXRlOiBgXG5cdFx0PHNlY3Rpb24gY2xhc3M9XCJ3ZWF0aGVyLXNlYXJjaFwiPlxuXHRcdFx0PGZvcm0gKG5nU3VibWl0KT1cIm9uU3VibWl0KGYpXCIgI2Y9XCJuZ0Zvcm1cIj5cblx0XHRcdFx0PGxhYmVsIGZvcj1cImNpdHlcIj5DaXR5PC9sYWJlbD5cblx0XHRcdFx0PGlucHV0IG5nQ29udHJvbD1cImxvY2F0aW9uXCIgdHlwZT1cInRleHRcIiBpZD1cImNpdHlcIiByZXF1aXJlZD5cblx0XHRcdFx0PGJ1dHRvbiB0eXBlPVwic3VibWl0XCI+QWRkIENpdHk8L2J1dHRvbj5cblx0XHRcdDwvZm9ybT5cblx0XHRcdDxkaXY+XG5cdFx0XHRcdDxzcGFuIGNsYXNzPVwiaW5mb1wiPkNpdHkgZm91bmQ6PC9zcGFuPiBDaXR5IE5hbWVcblx0XHRcdDwvZGl2PlxuXHRcdDwvc2VjdGlvbj5cblx0YCxcblx0cHJvdmlkZXJzOiBbV2VhdGhlclNlcnZpY2VdXG59KVxuZXhwb3J0IGNsYXNzIFdlYXRoZXJTZWFyY2hDb21wb25lbnR7XG5cdGNvbnN0cnVjdG9yIChwcml2YXRlIF93ZWF0aGVyU2VydmljZTogV2VhdGhlclNlcnZpY2UpIHt9XG5cdG9uU3VibWl0KGZvcm06IENvbnRyb2xHcm91cCkge1xuXHRcdC8vIGNvbnNvbGUubG9nKGZvcm0pO1xuXHRcdHRoaXMuX3dlYXRoZXJTZXJ2aWNlLnNlYXJjaFdlYXRoZXJEYXRhKGZvcm0udmFsdWUubG9jYXRpb24pXG5cdFx0LnN1YnNjcmliZShcblx0XHRcdGRhdGEgPT4ge1xuXHRcdFx0XHRjb25zdCB3ZWF0aGVySXRlbSA9IG5ldyBXZWF0aGVySXRlbSgpXG5cdFx0XHR9XG5cdFx0KTtcblx0fVxufSJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYXRoZXIvd2VhdGhlci1zZWFyY2guY29tcG9uZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O1lBb0JBO2dCQUlJLGdDQUFvQixlQUE4QjtvQkFBOUIsb0JBQWUsR0FBZixlQUFlLENBQWU7b0JBSDFDLGlCQUFZLEdBQUcsSUFBSSxpQkFBTyxFQUFVLENBQUM7b0JBQzdDLFNBQUksR0FBUSxFQUFFLENBQUM7Z0JBR2YsQ0FBQztnQkFFRCx5Q0FBUSxHQUFSO29CQUNJLElBQU0sV0FBVyxHQUFHLElBQUksMEJBQVcsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxJQUFJLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQyxXQUFXLEVBQUUsSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7b0JBQzNHLElBQUksQ0FBQyxlQUFlLENBQUMsY0FBYyxDQUFDLFdBQVcsQ0FBQyxDQUFDO2dCQUVyRCxDQUFDO2dCQUVELGlEQUFnQixHQUFoQixVQUFpQixRQUFlO29CQUM1QixJQUFJLENBQUMsWUFBWTt5QkFDWixJQUFJLENBQUMsUUFBUSxDQUFDLENBQUM7Z0JBQ3hCLENBQUM7Z0JBRUQseUNBQVEsR0FBUjtvQkFBQSxpQkFRQztvQkFQRyxJQUFJLENBQUMsWUFBWTt5QkFDWixZQUFZLENBQUMsR0FBRyxDQUFDO3lCQUNqQixvQkFBb0IsRUFBRTt5QkFDdEIsU0FBUyxDQUFDLFVBQUMsS0FBWSxJQUFLLE9BQUEsS0FBSSxDQUFDLGVBQWUsQ0FBQyxpQkFBaUIsQ0FBQyxLQUFLLENBQUMsRUFBN0MsQ0FBNkMsQ0FBQzt5QkFDMUUsU0FBUyxDQUNSLFVBQUEsSUFBSSxJQUFJLE9BQUEsS0FBSSxDQUFDLElBQUksR0FBRyxJQUFJLEVBQWhCLENBQWdCLENBQ3pCLENBQUM7Z0JBQ1YsQ0FBQztnQkF6Q0w7b0JBQUMsZ0JBQVMsQ0FBQzt3QkFDUCxRQUFRLEVBQUUsZ0JBQWdCO3dCQUMxQixRQUFRLEVBQUUsMGVBV1Q7cUJBQ0osQ0FBQzs7MENBQUE7Z0JBNEJGLDZCQUFDO1lBQUQsQ0EzQkEsQUEyQkMsSUFBQTtZQTNCRCwyREEyQkMsQ0FBQSIsImZpbGUiOiJ3ZWF0aGVyL3dlYXRoZXItc2VhcmNoLmNvbXBvbmVudC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50LCBPbkluaXR9IGZyb20gXCJhbmd1bGFyMi9jb3JlXCI7XG5pbXBvcnQge0NvbnRyb2xHcm91cH0gZnJvbSBcImFuZ3VsYXIyL2NvbW1vblwiO1xuaW1wb3J0IHtXZWF0aGVyU2VydmljZX0gZnJvbSBcIi4vd2VhdGhlci5zZXJ2aWNlXCI7XG5pbXBvcnQge1dlYXRoZXJJdGVtfSBmcm9tIFwiLi93ZWF0aGVyLWl0ZW1cIjtcbmltcG9ydCB7U3ViamVjdH0gZnJvbSBcInJ4anMvU3ViamVjdFwiO1xuQENvbXBvbmVudCh7XG4gICAgc2VsZWN0b3I6ICd3ZWF0aGVyLXNlYXJjaCcsXG4gICAgdGVtcGxhdGU6IGBcbiAgICAgICAgPHNlY3Rpb24gY2xhc3M9XCJ3ZWF0aGVyLXNlYXJjaFwiPlxuICAgICAgICAgICAgPGZvcm0gKG5nU3VibWl0KT1cIm9uU3VibWl0KClcIj5cbiAgICAgICAgICAgICAgICA8bGFiZWwgZm9yPVwiY2l0eVwiPkNpdHk8L2xhYmVsPlxuICAgICAgICAgICAgICAgIDxpbnB1dCBuZ0NvbnRyb2w9XCJsb2NhdGlvblwiIHR5cGU9XCJ0ZXh0XCIgaWQ9XCJjaXR5XCIgKGlucHV0KT1cIm9uU2VhcmNoTG9jYXRpb24oaW5wdXQudmFsdWUpXCIgcmVxdWlyZWQgI2lucHV0PlxuICAgICAgICAgICAgICAgIDxidXR0b24gdHlwZT1cInN1Ym1pdFwiPkFkZCBDaXR5PC9idXR0b24+XG4gICAgICAgICAgICA8L2Zvcm0+XG4gICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPVwiaW5mb1wiPkNpdHkgZm91bmQ6PC9zcGFuPiB7e2RhdGEubmFtZX19XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9zZWN0aW9uPlxuICAgIGBcbn0pXG5leHBvcnQgY2xhc3MgV2VhdGhlclNlYXJjaENvbXBvbmVudCBpbXBsZW1lbnRzIE9uSW5pdCB7XG4gICAgcHJpdmF0ZSBzZWFyY2hTdHJlYW0gPSBuZXcgU3ViamVjdDxzdHJpbmc+KCk7XG4gICAgZGF0YTogYW55ID0ge307XG5cbiAgICBjb25zdHJ1Y3Rvcihwcml2YXRlIF93ZWF0aGVyU2VydmljZTpXZWF0aGVyU2VydmljZSkge1xuICAgIH1cblxuICAgIG9uU3VibWl0KCkge1xuICAgICAgICBjb25zdCB3ZWF0aGVySXRlbSA9IG5ldyBXZWF0aGVySXRlbSh0aGlzLmRhdGEubmFtZSwgdGhpcy5kYXRhLndlYXRoZXJbMF0uZGVzY3JpcHRpb24sIHRoaXMuZGF0YS5tYWluLnRlbXApO1xuICAgICAgICB0aGlzLl93ZWF0aGVyU2VydmljZS5hZGRXZWF0aGVySXRlbSh3ZWF0aGVySXRlbSk7XG5cbiAgICB9XG5cbiAgICBvblNlYXJjaExvY2F0aW9uKGNpdHlOYW1lOnN0cmluZykge1xuICAgICAgICB0aGlzLnNlYXJjaFN0cmVhbVxuICAgICAgICAgICAgLm5leHQoY2l0eU5hbWUpO1xuICAgIH1cblxuICAgIG5nT25Jbml0KCkge1xuICAgICAgICB0aGlzLnNlYXJjaFN0cmVhbVxuICAgICAgICAgICAgLmRlYm91bmNlVGltZSgzMDApXG4gICAgICAgICAgICAuZGlzdGluY3RVbnRpbENoYW5nZWQoKVxuICAgICAgICAgICAgLnN3aXRjaE1hcCgoaW5wdXQ6c3RyaW5nKSA9PiB0aGlzLl93ZWF0aGVyU2VydmljZS5zZWFyY2hXZWF0aGVyRGF0YShpbnB1dCkpXG4gICAgICAgICAgICAuc3Vic2NyaWJlKFxuICAgICAgICAgICAgICBkYXRhID0+IHRoaXMuZGF0YSA9IGRhdGFcbiAgICAgICAgICAgICk7XG4gICAgfVxufSJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==

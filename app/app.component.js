@@ -1,4 +1,4 @@
-System.register(['angular2/core', "./weather/weather-list.component", "./weather/weather-search.component"], function(exports_1, context_1) {
+System.register(['angular2/core', "./weather/weather-list.component", "./weather/weather-search.component", "./sidebar.component"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', "./weather/weather-list.component", "./weather
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, weather_list_component_1, weather_search_component_1;
+    var core_1, weather_list_component_1, weather_search_component_1, sidebar_component_1;
     var AppComponent;
     return {
         setters:[
@@ -22,6 +22,9 @@ System.register(['angular2/core', "./weather/weather-list.component", "./weather
             },
             function (weather_search_component_1_1) {
                 weather_search_component_1 = weather_search_component_1_1;
+            },
+            function (sidebar_component_1_1) {
+                sidebar_component_1 = sidebar_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -30,8 +33,8 @@ System.register(['angular2/core', "./weather/weather-list.component", "./weather
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n        <header>\n            <h1>Weather App</h1>\n            <h3>Angular 2 | Typescript</h3>\n        </header>\n        <weather-search></weather-search>\n        <weather-list></weather-list>\n    ",
-                        directives: [weather_list_component_1.WeatherListComponent, weather_search_component_1.WeatherSearchComponent]
+                        template: "\n        <header>\n            <h1>Weather App</h1>\n            <h3>Angular 2 | Typescript</h3>\n        </header>\n        <my-sidebar></my-sidebar>\n        <weather-search></weather-search>\n        <weather-list></weather-list>\n    ",
+                        directives: [weather_list_component_1.WeatherListComponent, weather_search_component_1.WeatherSearchComponent, sidebar_component_1.SidebarComponent]
                     }), 
                     __metadata('design:paramtypes', [])
                 ], AppComponent);
@@ -42,4 +45,4 @@ System.register(['angular2/core', "./weather/weather-list.component", "./weather
     }
 });
 
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7WUFnQkE7Z0JBQUE7Z0JBQ0EsQ0FBQztnQkFiRDtvQkFBQyxnQkFBUyxDQUFDO3dCQUNQLFFBQVEsRUFBRSxRQUFRO3dCQUNsQixRQUFRLEVBQUUsOE1BT1Q7d0JBQ0QsVUFBVSxFQUFFLENBQUMsNkNBQW9CLEVBQUUsaURBQXNCLENBQUM7cUJBQzdELENBQUM7O2dDQUFBO2dCQUVGLG1CQUFDO1lBQUQsQ0FEQSxBQUNDLElBQUE7WUFERCx1Q0FDQyxDQUFBIiwiZmlsZSI6ImFwcC5jb21wb25lbnQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbXBvbmVudH0gZnJvbSAnYW5ndWxhcjIvY29yZSc7XG5pbXBvcnQge1dlYXRoZXJMaXN0Q29tcG9uZW50fSBmcm9tIFwiLi93ZWF0aGVyL3dlYXRoZXItbGlzdC5jb21wb25lbnRcIjtcbmltcG9ydCB7V2VhdGhlclNlYXJjaENvbXBvbmVudH0gZnJvbSBcIi4vd2VhdGhlci93ZWF0aGVyLXNlYXJjaC5jb21wb25lbnRcIjtcblxuQENvbXBvbmVudCh7XG4gICAgc2VsZWN0b3I6ICdteS1hcHAnLFxuICAgIHRlbXBsYXRlOiBgXG4gICAgICAgIDxoZWFkZXI+XG4gICAgICAgICAgICA8aDE+V2VhdGhlciBBcHA8L2gxPlxuICAgICAgICAgICAgPGgzPkFuZ3VsYXIgMiB8IFR5cGVzY3JpcHQ8L2gzPlxuICAgICAgICA8L2hlYWRlcj5cbiAgICAgICAgPHdlYXRoZXItc2VhcmNoPjwvd2VhdGhlci1zZWFyY2g+XG4gICAgICAgIDx3ZWF0aGVyLWxpc3Q+PC93ZWF0aGVyLWxpc3Q+XG4gICAgYCxcbiAgICBkaXJlY3RpdmVzOiBbV2VhdGhlckxpc3RDb21wb25lbnQsIFdlYXRoZXJTZWFyY2hDb21wb25lbnRdXG59KVxuZXhwb3J0IGNsYXNzIEFwcENvbXBvbmVudCB7XG59Il0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7WUFpQkE7Z0JBQUE7Z0JBQ0EsQ0FBQztnQkFkRDtvQkFBQyxnQkFBUyxDQUFDO3dCQUNQLFFBQVEsRUFBRSxRQUFRO3dCQUNsQixRQUFRLEVBQUUsaVBBUVQ7d0JBQ0QsVUFBVSxFQUFFLENBQUMsNkNBQW9CLEVBQUUsaURBQXNCLEVBQUUsb0NBQWdCLENBQUM7cUJBQy9FLENBQUM7O2dDQUFBO2dCQUVGLG1CQUFDO1lBQUQsQ0FEQSxBQUNDLElBQUE7WUFERCx1Q0FDQyxDQUFBIiwiZmlsZSI6ImFwcC5jb21wb25lbnQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbXBvbmVudH0gZnJvbSAnYW5ndWxhcjIvY29yZSc7XG5pbXBvcnQge1dlYXRoZXJMaXN0Q29tcG9uZW50fSBmcm9tIFwiLi93ZWF0aGVyL3dlYXRoZXItbGlzdC5jb21wb25lbnRcIjtcbmltcG9ydCB7V2VhdGhlclNlYXJjaENvbXBvbmVudH0gZnJvbSBcIi4vd2VhdGhlci93ZWF0aGVyLXNlYXJjaC5jb21wb25lbnRcIjtcbmltcG9ydCB7U2lkZWJhckNvbXBvbmVudH0gZnJvbSBcIi4vc2lkZWJhci5jb21wb25lbnRcIjtcbkBDb21wb25lbnQoe1xuICAgIHNlbGVjdG9yOiAnbXktYXBwJyxcbiAgICB0ZW1wbGF0ZTogYFxuICAgICAgICA8aGVhZGVyPlxuICAgICAgICAgICAgPGgxPldlYXRoZXIgQXBwPC9oMT5cbiAgICAgICAgICAgIDxoMz5Bbmd1bGFyIDIgfCBUeXBlc2NyaXB0PC9oMz5cbiAgICAgICAgPC9oZWFkZXI+XG4gICAgICAgIDxteS1zaWRlYmFyPjwvbXktc2lkZWJhcj5cbiAgICAgICAgPHdlYXRoZXItc2VhcmNoPjwvd2VhdGhlci1zZWFyY2g+XG4gICAgICAgIDx3ZWF0aGVyLWxpc3Q+PC93ZWF0aGVyLWxpc3Q+XG4gICAgYCxcbiAgICBkaXJlY3RpdmVzOiBbV2VhdGhlckxpc3RDb21wb25lbnQsIFdlYXRoZXJTZWFyY2hDb21wb25lbnQsIFNpZGViYXJDb21wb25lbnRdXG59KVxuZXhwb3J0IGNsYXNzIEFwcENvbXBvbmVudCB7XG59Il0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
